@@ -38,6 +38,7 @@ jcoordinate = headerBytes[42:47].decode('ascii')
 icoordinate = headerBytes[48:53].decode('ascii')
 scalingFactor = headerBytes[120:125].decode('ascii')
 
+print(headerString)
 """
 print("Scaling Factor: " + scalingFactor)
 
@@ -67,6 +68,7 @@ print("GreenwichOrient: " + greenwichOrientation)
 
 #print(headerString)
 
+
 mode = "L"
 size = 304 , 448
 
@@ -75,7 +77,25 @@ rety = 249
 
 
 intArray = [x for x in imgBytes]
+tupleArray = []
 
+
+for i in range(304*448):
+    if intArray[i - 1] == masked:
+        tupleArray.append((255,255,0))
+    elif intArray[i - 1] == unused:
+        tupleArray.append((255,0,0))
+    elif intArray[i - 1] == coastlines:
+        tupleArray.append((0,128,128))
+    elif intArray[i - 1] == landmask:
+        tupleArray.append((0,255,0))
+    elif intArray[i - 1] == missing:
+        tupleArray.append((255,255,255))
+    else:
+        tupleArray.append((0,0,intArray[i - 1]))
+
+
+"""
 for i in range(304 * 448):
     if i % 304 == retx and i // 304 == rety:
         print("The value is " + str(intArray[i]/250))
@@ -88,14 +108,15 @@ for i in range(304 * 448):
 
 
 imgBytes = bytes(intArray)
-
+"""
 """
 0123  1234
 4567  5678
 89ab  9abc
 """
-
 img = Image.frombytes(mode, size, imgBytes)
+
+
 
 img.save("testImage.png")
 

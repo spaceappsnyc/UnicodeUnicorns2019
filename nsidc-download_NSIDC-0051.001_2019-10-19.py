@@ -39,9 +39,29 @@ except ImportError:
 
 short_name = 'NSIDC-0051'
 version = '1'
-time_start = '2015-12-16T00:00:00Z'
-time_end = '2015-12-17T23:59:59Z'
-polygon = '-151.45870655837015,72.66348884001891,-150.46368327346124,72.60988960714434,-149.41222352576702,72.99851657777968,-151.3040412799104,73.05375353325411,-151.45870655837015,72.66348884001891'
+time_start = '2001-06-01T00:00:00Z'
+time_end = '2001-12-31T00:00:00Z'
+
+beaufort_lat = 73
+beaufort_lon = -150
+
+cacana_lat = 85
+cacana_lon = -120
+
+cafram_lat =85
+cafram_lon = 0
+
+esiber_lat = 82
+esiber_lon = 150
+
+def stringify_polygon(lat, lon):
+    return str(lon - 0.5) + "," + str(lat - 0.5) + "," + str(lon + 0.5) + "," + str(lat - 0.5) + "," + str(lon + 0.5) + "," + str(lat + 0.5) + "," + str(lon - 0.5) + "," + str(lat + 0.5) + "," + str(lon - 0.5) + "," + str(lat - 0.5)
+
+
+
+polygon = stringify_polygon(beaufort_lat, beaufort_lon)
+
+
 filename_filter = '*'
 
 CMR_URL = 'https://cmr.earthdata.nasa.gov'
@@ -154,7 +174,7 @@ def cmr_download(urls):
         if not credentials and urlparse(url).scheme == 'https':
             credentials = get_credentials(url)
 
-        filename = url.split('/')[-1]
+        filename = "dataset/ice_concentration/beaufort/" + url.split('/')[-1]
         print('{0}/{1}: {2}'.format(str(index).zfill(len(str(url_count))),
                                     url_count,
                                     filename))
