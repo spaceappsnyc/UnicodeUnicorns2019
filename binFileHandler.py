@@ -16,8 +16,8 @@ def div_by_250(x):
     return x/250
 
 def get_col_row_from_lat_long(i,j,lat, long):
-    col = j + 150 * (lat/56.35) * numpy.cos(long - 45)
-    row = i - 234 * (lat/39.43) * numpy.cos(long - 45)
+    col = j + 150 * (90-lat)/(90-56.35) * numpy.cos(long - 45)
+    row = i - 234 * (90-lat)/(90-39.43) * numpy.cos(long - 45)
     return (col, row)
 
 
