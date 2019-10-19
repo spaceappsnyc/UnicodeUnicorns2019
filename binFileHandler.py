@@ -38,6 +38,7 @@ jcoordinate = headerBytes[42:47].decode('ascii')
 icoordinate = headerBytes[48:53].decode('ascii')
 scalingFactor = headerBytes[120:125].decode('ascii')
 
+"""
 print("Scaling Factor: " + scalingFactor)
 
 
@@ -48,30 +49,54 @@ print("jCoord: " + jcoordinate)
 print("latEnclosed: " + latEnclosed)
 
 print("GreenwichOrient: " + greenwichOrientation)
+"""
 
+#ser = ser.replace(masked, numpy.NaN)
+#ser = ser.replace(unused, numpy.NaN)
+#ser = ser.replace(coastlines, numpy.NaN)
+#ser = ser.replace(landmask, numpy.NaN)
+#ser = ser.replace(missing, numpy.NaN)
+#map(div_by_250, ser)
 
+#print(ser[0])
 
-
-ser = pd.Series([x for x in imgBytes])
-ser = ser.replace(masked, numpy.NaN)
-ser = ser.replace(unused, numpy.NaN)
-ser = ser.replace(coastlines, numpy.NaN)
-ser = ser.replace(landmask, numpy.NaN)
-ser = ser.replace(missing, numpy.NaN)
-map(div_by_250, ser)
-
-print(ser[0])
-
-print(numpy.mean(ser))
-print(numpy.count_nonzero(ser[ser > ser.median()]))
-print(numpy.count_nonzero(ser))
+#print(numpy.mean(ser))
+#print(numpy.count_nonzero(ser[ser > ser.median()]))
+#print(numpy.count_nonzero(ser))
 
 
 #print(headerString)
 
-#mode = "L"
-#size = 304 , 448
+mode = "L"
+size = 304 , 448
 
-#img = Image.frombytes(mode, size, imgBytes)
+retx = 170
+rety = 249
 
-#img.save("testImage.png")
+
+intArray = [x for x in imgBytes]
+
+for i in range(304 * 448):
+    if i % 304 == retx and i // 304 == rety:
+        print("The value is " + str(intArray[i]/250))
+    elif i == retx:
+        intArray[i] = 0
+    elif i % 304 == retx:
+        intArray[i] = 0
+    elif i // 304  == rety:
+        intArray[i] = 0
+
+
+imgBytes = bytes(intArray)
+
+"""
+0123  1234
+4567  5678
+89ab  9abc
+"""
+
+img = Image.frombytes(mode, size, imgBytes)
+
+img.save("testImage.png")
+
+
