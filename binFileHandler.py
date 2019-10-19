@@ -12,6 +12,13 @@ missing = 255
 def get_bytes_from_file(filename):
     return open(filename, "rb").read()
 
+def div_by_250(x):
+    return x/250
+
+def get_col_row_from_lat_long(i,j,lat, long):
+    col = j + 150 * (lat/56.35) * numpy.cos(long - 45)
+    row = i - 234 * (lat/39.43) * numpy.cos(long - 45)
+    return (col, row)
 
 
 fileBytes = get_bytes_from_file("dataset/nt_20151216_f17_v1.1_n.bin")
@@ -51,16 +58,20 @@ ser = ser.replace(unused, numpy.NaN)
 ser = ser.replace(coastlines, numpy.NaN)
 ser = ser.replace(landmask, numpy.NaN)
 ser = ser.replace(missing, numpy.NaN)
+map(div_by_250, ser)
 
+print(ser[0])
+
+print(numpy.mean(ser))
 print(numpy.count_nonzero(ser[ser > ser.median()]))
 print(numpy.count_nonzero(ser))
 
 
 #print(headerString)
 
-mode = "L"
-size = 304 , 448
+#mode = "L"
+#size = 304 , 448
 
-img = Image.frombytes(mode, size, imgBytes)
+#img = Image.frombytes(mode, size, imgBytes)
 
-img.save("testImage.png")
+#img.save("testImage.png")
