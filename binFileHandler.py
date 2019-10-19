@@ -1,4 +1,6 @@
 from PIL import Image
+import pandas as pd
+import numpy
 
 
 masked = 251
@@ -12,7 +14,7 @@ def get_bytes_from_file(filename):
 
 
 
-fileBytes = get_bytes_from_file("nt_20151216_f17_v1.1_n.bin")
+fileBytes = get_bytes_from_file("dataset/nt_20151216_f17_v1.1_n.bin")
 headerBytes = fileBytes[0:299]
 imgBytes = fileBytes[300:]
 
@@ -41,6 +43,17 @@ print("latEnclosed: " + latEnclosed)
 print("GreenwichOrient: " + greenwichOrientation)
 
 
+
+
+ser = pd.Series([x for x in imgBytes])
+ser = ser.replace(masked, numpy.NaN)
+ser = ser.replace(unused, numpy.NaN)
+ser = ser.replace(coastlines, numpy.NaN)
+ser = ser.replace(landmask, numpy.NaN)
+ser = ser.replace(missing, numpy.NaN)
+
+print(numpy.count_nonzero(ser[ser > ser.median()]))
+print(numpy.count_nonzero(ser))
 
 
 #print(headerString)
